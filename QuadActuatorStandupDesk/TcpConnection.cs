@@ -1,23 +1,24 @@
-﻿using System;
-using System.Net.Sockets;
-
-namespace QuadActuatorStandupDesk
+﻿namespace QuadActuatorStandupDesk
 {
+    using System;
+    using System.Net.Sockets;
+
     public class TcpConnection : IDisposable
     {
         public delegate void ConnectionEstablishedEventHandler(System.Net.IPEndPoint endPoint);
 
-        public event ConnectionEstablishedEventHandler ConnectionEstablished;
+        private NetworkStream _stream = null;
 
-        public event EventHandler StreamChanged;
+        bool disposed = false;
+
+        private string ipOrHost;
+
+        private int port;
 
         private TcpClient tcp = null;
-        private string ipOrHost;
-        private int port;
 
         public bool IsOpened => tcp != null;
 
-        private NetworkStream _stream = null;
         public NetworkStream Stream
         {
             get => _stream;
@@ -28,12 +29,16 @@ namespace QuadActuatorStandupDesk
             }
         }
 
-        bool disposed = false;
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public event ConnectionEstablishedEventHandler ConnectionEstablished;
+
+        public event EventHandler StreamChanged;
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposed)
@@ -89,6 +94,7 @@ namespace QuadActuatorStandupDesk
                 Stream = null;
                 stream.Dispose();
             }
+
             if (tcp != null)
             {
                 tcp.Close();
@@ -96,6 +102,7 @@ namespace QuadActuatorStandupDesk
 
                 progress?.Report(Log.Info($"{ipOrHost}:{port} was disconnected."));
             }
+
             ipOrHost = string.Empty;
             port = 0;
         }
@@ -107,11 +114,12 @@ namespace QuadActuatorStandupDesk
 
             if (tcp.Connected)
             {
-                ConnectionEstablished?.Invoke((System.Net.IPEndPoint)tcp.Client.RemoteEndPoint);
+                ConnectionEstablished?.Invoke((System.Net.IPEndPoint) tcp.Client.RemoteEndPoint);
 
-                Console.WriteLine("Connected to LAN {0}:{1}.",
-                    ((System.Net.IPEndPoint)tcp.Client.RemoteEndPoint).Address,
-                    ((System.Net.IPEndPoint)tcp.Client.RemoteEndPoint).Port);
+                Console.WriteLine(
+                    "Connected to LAN {0}:{1}.",
+                    ((System.Net.IPEndPoint) tcp.Client.RemoteEndPoint).Address,
+                    ((System.Net.IPEndPoint) tcp.Client.RemoteEndPoint).Port);
 
                 var stream = tcp.GetStream();
                 stream.ReadTimeout = 10000;

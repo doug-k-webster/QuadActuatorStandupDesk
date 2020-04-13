@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuadActuatorStandupDesk
+﻿namespace QuadActuatorStandupDesk
 {
+    using System;
+
     public class Desk
     {
         private readonly PigpiodIf pigpiodIf = new PigpiodIf();
@@ -53,6 +51,27 @@ namespace QuadActuatorStandupDesk
             pigpiodIf.gpio_write(20, PigpiodIf.PI_HIGH);
             pigpiodIf.gpio_write(12, PigpiodIf.PI_HIGH);
             progress?.Report(Log.Debug("all actuators stopped"));
+        }
+
+        public void ExecuteCommand(string commandText, IProgress<Log> progress)
+        {
+            // just a simple command interpreter here
+            if (commandText == "up")
+            {
+                this.Up(progress);
+            }
+            else if (commandText == "down")
+            {
+                this.Down(progress);
+            }
+            else if (commandText == "stop")
+            {
+                this.Stop(progress);
+            }
+            else
+            {
+                progress.Report(Log.Warn($"Unknown command: {commandText}"));
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading;
-
-namespace QuadActuatorStandupDesk
+﻿namespace QuadActuatorStandupDesk
 {
+    using System.Threading;
+
     public class SystemTest
     {
         public static void Testing()
@@ -29,7 +28,7 @@ namespace QuadActuatorStandupDesk
                 pigpiodIf.gpio_write(20, PigpiodIf.PI_HIGH);
                 Thread.Sleep(delay);
                 pigpiodIf.gpio_write(12, PigpiodIf.PI_HIGH);
-                Thread.Sleep(delay);               
+                Thread.Sleep(delay);
                 pigpiodIf.gpio_write(26, PigpiodIf.PI_LOW);
                 Thread.Sleep(delay);
                 pigpiodIf.gpio_write(13, PigpiodIf.PI_LOW);

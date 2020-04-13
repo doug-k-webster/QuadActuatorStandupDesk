@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuadActuatorStandupDesk
+﻿namespace QuadActuatorStandupDesk
 {
+    using System;
+
     public class Log
     {
-        public static Log Debug(string text) => new Log(text, 0);
-
-        public static Log Info(string text) => new Log(text, 1);
-
-        public static Log Warn(string text) => new Log(text, 2);
-
-        public static Log Error(string text) => new Log(text, 3);
-
-        public static Log Fatal(string text) => new Log(text, 5);
-
         public Log(string text, int logLevel = 0)
         {
             this.Text = text;
@@ -27,5 +15,15 @@ namespace QuadActuatorStandupDesk
         public string Text { get; }
 
         public int LogLevel { get; }
+
+        public static Log Debug(string text) => new Log(text, 0);
+
+        public static Log Info(string text) => new Log(text, 1);
+
+        public static Log Warn(string text) => new Log(text, 2);
+
+        public static Log Error(string text) => new Log(text, 3);
+
+        public static Log Fatal(string text) => new Log(text, 5);
     }
 }

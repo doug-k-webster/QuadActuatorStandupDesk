@@ -15,8 +15,12 @@ namespace QASDWin
                 return null;
             }
 
-            DateTime dt = DateTime.Parse(value.ToString());
-            return dt.ToString("T");
+            if (value is DateTime dt)
+            {
+                return dt.ToString("HH:mm:ss.ffff");
+            }
+
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
