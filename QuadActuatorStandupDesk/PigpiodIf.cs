@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rapidnack.Net
+namespace QuadActuatorStandupDesk
 {
 	public class PigpiodIf : IDisposable
 	{
@@ -51,9 +51,6 @@ namespace Rapidnack.Net
 			public UInt32 usDelay { get; set; }
 		}
 
-
-		#region # public enum
-
 		public enum EError
 		{
 			pigif_bad_send = -2000,
@@ -71,20 +68,10 @@ namespace Rapidnack.Net
 			pigif_too_many_pis = -2012,
 		}
 
-		#endregion
-
-
-		#region # event
-
 		public event EventHandler CommandStreamChanged;
 		public event EventHandler NotifyStreamChanged;
 		public event EventHandler StreamChanged;
 		public event EventHandler StreamConnected;
-
-		#endregion
-
-
-		#region # private const
 
 		private const string PI_DEFAULT_SOCKET_PORT_STR = "8888";
 		private const string PI_DEFAULT_SOCKET_ADDR_STR = "127.0.0.1";
@@ -285,10 +272,6 @@ namespace Rapidnack.Net
 		private const int PI_CMD_XOR = 841;
 		private const int PI_CMD_EVTWT = 842;
 
-		#endregion
-
-
-		#region # public const
 
 		/* gpio: 0-53 */
 
@@ -765,11 +748,6 @@ namespace Rapidnack.Net
 
 		/*DEF_E*/
 
-		#endregion
-
-
-		#region # private field
-
 		private bool isConnecting = false;
 
 		private int gPigHandle;
@@ -930,19 +908,14 @@ namespace Rapidnack.Net
 		   {PI_CMD_INTERRUPTED  , "command interrupted, Python"},
 		};
 
-		#endregion
 
-
-		#region # private property
 
 		private TcpConnection TcpConnection { get; set; }
 
 		private TcpConnection NotifyTcpConnection { get; set; }
 
-		#endregion
 
 
-		#region # public property
 
 		private object _lockObject = new object();
 		public object LockObject
@@ -1045,10 +1018,7 @@ namespace Rapidnack.Net
 			}
 		}
 
-		#endregion
 
-
-		#region # constructor
 
 		public PigpiodIf()
 		{
@@ -1080,11 +1050,6 @@ namespace Rapidnack.Net
 			};
 		}
 
-		#endregion
-
-
-		#region # Implementation of IDisposable
-
 		bool disposed = false;
 		public void Dispose()
 		{
@@ -1099,7 +1064,7 @@ namespace Rapidnack.Net
 			if (disposing)
 			{
 				// Release managed objects
-				pigpio_stop();
+				pigpio_stop(null);
 			}
 
 			// Release unmanaged objects
@@ -1111,10 +1076,6 @@ namespace Rapidnack.Net
 			Dispose(false);
 		}
 
-		#endregion
-
-
-		#region # public method
 
 		public double time_time()
 		{
@@ -1203,7 +1164,7 @@ namespace Rapidnack.Net
 		//     start_thread() and
 		//     stop_thread().
 
-		public int pigpio_start(string addrStr, string portStr)
+		public int pigpio_start(string addrStr, string portStr, IProgress<Log> progress)
 		{
 			if (string.IsNullOrWhiteSpace(addrStr))
 			{
@@ -1221,13 +1182,13 @@ namespace Rapidnack.Net
 			}
 
 			isConnecting = false;
-			this.TcpConnection.Open(addrStr, port);
-			NotifyTcpConnection.Open(addrStr, port);
+			this.TcpConnection.Open(addrStr, port, progress);
+			NotifyTcpConnection.Open(addrStr, port, progress);
 
 			return 0;
 		}
 
-		public void pigpio_stop()
+		public void pigpio_stop(IProgress<Log> progress)
 		{
 			if (cts != null)
 			{
@@ -1244,13 +1205,13 @@ namespace Rapidnack.Net
 			{
 				// Execute handlers of StreamChanged event, and call Close()
 				this.CommandStream = null;
-				this.TcpConnection.Close();
+				this.TcpConnection.Close(progress);
 			}
 			if (NotifyTcpConnection != null)
 			{
 				// Execute handlers of NotifyStreamChanged event, and call Close()
 				NotifyStream = null;
-				NotifyTcpConnection.Close();
+				NotifyTcpConnection.Close(progress);
 			}
 		}
 
@@ -2400,10 +2361,6 @@ namespace Rapidnack.Net
 		int event_trigger(UInt32 evt)
 		{ return pigpio_command(PI_CMD_EVM, (int)evt, 0); }
 
-		#endregion
-
-
-		#region # private method
 
 		private byte[] UInt32ArrayToBytes(UInt32[] array)
 		{
@@ -2773,7 +2730,5 @@ namespace Rapidnack.Net
 
 			return count;
 		}
-
-		#endregion
 	}
 }

@@ -1,15 +1,14 @@
-﻿using Rapidnack.Net;
-using System;
+﻿using System;
 using System.Threading;
 
 namespace QuadActuatorStandupDesk
 {
-    public class Class1
+    public class SystemTest
     {
         public static void Testing()
         {
             var pigpiodIf = new PigpiodIf();
-            pigpiodIf.pigpio_start("192.168.1.10", "8888");
+            pigpiodIf.pigpio_start("192.168.1.10", "8888", null);
 
             var delay = 100;
 
