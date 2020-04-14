@@ -74,5 +74,10 @@
 
             this.desk.ExecuteCommand(commandText, this.progress);
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            this.desk.Stop(this.progress);
+        }
     }
 }

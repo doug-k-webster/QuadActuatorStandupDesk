@@ -4,7 +4,24 @@
 
     public class Desk
     {
-        private readonly PigpiodIf pigpiodIf = new PigpiodIf();
+        private readonly PigpiodIf pigpiodIf;
+                
+        public Desk()
+        {
+            this.pigpiodIf = new PigpiodIf();
+            this.BackLeftActuator = new BackLeftActuator(this.pigpiodIf);
+            this.FrontLeftActuator = new FrontLeftActuator(this.pigpiodIf);
+            this.FrontRightActuator = new FrontRightActuator(this.pigpiodIf);
+            this.BackRightActuator = new BackRightActuator(this.pigpiodIf);
+        }
+
+        public BackLeftActuator BackLeftActuator { get; }
+
+        public FrontLeftActuator FrontLeftActuator { get; }
+
+        public FrontRightActuator FrontRightActuator { get; }
+
+        public BackRightActuator BackRightActuator { get; }
 
         public void Initialize(IProgress<Log> progress)
         {
@@ -13,44 +30,32 @@
 
         public void Up(IProgress<Log> progress)
         {
-            progress?.Report(Log.Debug("asking all actuators to go up..."));
-            pigpiodIf.gpio_write(26, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(13, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(21, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(27, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(22, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(19, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(20, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(12, PigpiodIf.PI_LOW);
-            progress?.Report(Log.Debug("all actuators going up"));
+            progress?.Report(Log.Debug("asking desk to go up..."));
+            this.BackLeftActuator.Extend(progress);
+            this.FrontLeftActuator.Extend(progress);
+            this.FrontRightActuator.Extend(progress);
+            this.BackRightActuator.Extend(progress);
+            progress?.Report(Log.Debug("desk going up"));
         }
 
         public void Down(IProgress<Log> progress)
         {
-            progress?.Report(Log.Debug("asking all actuators to go down..."));
-            pigpiodIf.gpio_write(26, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(13, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(21, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(27, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(22, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(19, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(20, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(12, PigpiodIf.PI_HIGH);
-            progress?.Report(Log.Debug("all actuators going down"));
+            progress?.Report(Log.Debug("asking desk to go down..."));
+            this.BackLeftActuator.Retract(progress);
+            this.FrontLeftActuator.Retract(progress);
+            this.FrontRightActuator.Retract(progress);
+            this.BackRightActuator.Retract(progress);
+            progress?.Report(Log.Debug("desk going down"));
         }
 
         public void Stop(IProgress<Log> progress)
         {
-            progress?.Report(Log.Debug("stopping all actuators..."));
-            pigpiodIf.gpio_write(26, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(13, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(21, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(27, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(22, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(19, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(20, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(12, PigpiodIf.PI_HIGH);
-            progress?.Report(Log.Debug("all actuators stopped"));
+            progress?.Report(Log.Debug("stopping desk..."));
+            this.BackLeftActuator.Stop(progress);
+            this.FrontLeftActuator.Stop(progress);
+            this.FrontRightActuator.Stop(progress);
+            this.BackRightActuator.Stop(progress);
+            progress?.Report(Log.Debug("desk stopped"));
         }
 
         public void ExecuteCommand(string commandText, IProgress<Log> progress)
