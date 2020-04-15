@@ -1,6 +1,7 @@
 ﻿namespace QuadActuatorStandupDesk
 {
     using System;
+    using System.Threading;
 
     public class Desk
     {
@@ -31,20 +32,26 @@
         public void Up(IProgress<Log> progress)
         {
             progress?.Report(Log.Debug("asking desk to go up..."));
-            this.BackLeftActuator.Extend(progress);
-            this.FrontLeftActuator.Extend(progress);
-            this.FrontRightActuator.Extend(progress);
             this.BackRightActuator.Extend(progress);
+            Thread.Sleep(5); 
+            this.BackLeftActuator.Extend(progress);
+            Thread.Sleep(5); 
+            this.FrontLeftActuator.Extend(progress);
+            Thread.Sleep(5); 
+            this.FrontRightActuator.Extend(progress);
             progress?.Report(Log.Debug("desk going up"));
         }
 
         public void Down(IProgress<Log> progress)
         {
             progress?.Report(Log.Debug("asking desk to go down..."));
-            this.BackLeftActuator.Retract(progress);
-            this.FrontLeftActuator.Retract(progress);
-            this.FrontRightActuator.Retract(progress);
             this.BackRightActuator.Retract(progress);
+            Thread.Sleep(5);
+            this.BackLeftActuator.Retract(progress);
+            Thread.Sleep(5); 
+            this.FrontLeftActuator.Retract(progress);
+            Thread.Sleep(5); 
+            this.FrontRightActuator.Retract(progress);
             progress?.Report(Log.Debug("desk going down"));
         }
 
@@ -52,8 +59,11 @@
         {
             progress?.Report(Log.Debug("stopping desk..."));
             this.BackLeftActuator.Stop(progress);
+            Thread.Sleep(5); 
             this.FrontLeftActuator.Stop(progress);
+            Thread.Sleep(5); 
             this.FrontRightActuator.Stop(progress);
+            Thread.Sleep(5); 
             this.BackRightActuator.Stop(progress);
             progress?.Report(Log.Debug("desk stopped"));
         }

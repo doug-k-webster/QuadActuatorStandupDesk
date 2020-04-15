@@ -59,6 +59,22 @@
 
         private void AllStopButton_Click(object sender, RoutedEventArgs e) => this.desk.Stop(this.progress);
 
+        private void FrontLeftUp_Click(object sender, RoutedEventArgs e) => this.desk.FrontLeftActuator.Extend(this.progress);
+
+        private void FrontLeftDown_Click(object sender, RoutedEventArgs e) => this.desk.FrontLeftActuator.Retract(this.progress);
+
+        private void BackLeftUp_Click(object sender, RoutedEventArgs e) => this.desk.BackLeftActuator.Extend(this.progress);
+
+        private void BackLeftDown_Click(object sender, RoutedEventArgs e) => this.desk.BackLeftActuator.Retract(this.progress);
+
+        private void FrontRightUp_Click(object sender, RoutedEventArgs e) => this.desk.FrontRightActuator.Extend(this.progress);
+
+        private void FrontRightDown_Click(object sender, RoutedEventArgs e) => this.desk.FrontRightActuator.Retract(this.progress);
+
+        private void BackRightUp_Click(object sender, RoutedEventArgs e) => this.desk.BackRightActuator.Extend(this.progress);
+
+        private void BackRightDown_Click(object sender, RoutedEventArgs e) => this.desk.BackRightActuator.Retract(this.progress);
+
         private void LogInfo(string text) => ((IProgress<Log>) this.progress).Report(Log.Info(text));
 
         private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)

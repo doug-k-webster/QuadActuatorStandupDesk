@@ -57,12 +57,55 @@
             <Button Grid.Column="2" Click="AllStopButton_Click">
             <Path Style="{StaticResource StopGlyph}" Stroke="Black" Fill="Blue"  />
             </Button>
-            <Button Grid.Column="3">
-                <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
-            </Button>
-            <Button Grid.Column="4">
-                <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
-            </Button>
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Click="FrontLeftUp_Click">
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+                <Button Grid.Row="1" Click="FrontLeftDown_Click">
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+            </Grid>
+            <Grid Grid.Column="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Click="BackLeftUp_Click">
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+                <Button Grid.Row="1" Click="BackLeftDown_Click">
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+            </Grid>
+            <Grid Grid.Column="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Click="BackRightUp_Click">
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+                <Button Grid.Row="1" Click="BackRightDown_Click">
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+            </Grid>
+            <Grid Grid.Column="7">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Click="FrontRightUp_Click">
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+                <Button Grid.Row="1" Click="FrontRightDown_Click">
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                </Button>
+            </Grid>
+
         </Grid>
         <ListView Grid.Row="2" Background="{x:Null}" ItemsSource="{Binding LogEntries}">
             <ListView.ItemTemplate>
