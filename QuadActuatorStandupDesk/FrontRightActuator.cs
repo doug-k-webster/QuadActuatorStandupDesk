@@ -1,8 +1,10 @@
-﻿namespace QuadActuatorStandupDesk
+﻿using System.Device.Gpio;
+
+namespace QuadActuatorStandupDesk
 {
     public class FrontRightActuator : Actuator
     {
-        public FrontRightActuator(PigpiodIf pigpiodIf) : base(pigpiodIf, nameof(FrontRightActuator), 22, 19)
+        public FrontRightActuator(GpioController pigpiodIf) : base(pigpiodIf, nameof(FrontRightActuator), 22, 19)
         {
         }
     }

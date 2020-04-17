@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuadActuatorStandupDesk", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDUtil", "QASDUtil\QASDUtil.csproj", "{D72E488B-BD90-4295-95DB-1E04C4227665}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QASDWin", "QASDWin\QASDWin.csproj", "{AF1A4704-C3EC-4FB6-889C-1A369C67E1E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDWin", "QASDWin\QASDWin.csproj", "{AF1A4704-C3EC-4FB6-889C-1A369C67E1E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QASDWebApi", "QASDWebApi\QASDWebApi.csproj", "{E72DF630-D081-4EDB-9FE5-1663BE89C51E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{AF1A4704-C3EC-4FB6-889C-1A369C67E1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1A4704-C3EC-4FB6-889C-1A369C67E1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1A4704-C3EC-4FB6-889C-1A369C67E1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

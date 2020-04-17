@@ -14,7 +14,7 @@
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Desk desk = new Desk();
+        private readonly DeskClient desk = new DeskClient();
 
         private readonly Progress<Log> progress;
 
@@ -59,21 +59,21 @@
 
         private void AllStopButton_Click(object sender, RoutedEventArgs e) => this.desk.Stop(this.progress);
 
-        private void FrontLeftUp_Click(object sender, RoutedEventArgs e) => this.desk.FrontLeftActuator.Extend(this.progress);
+        private void FrontLeftUp_Click(object sender, RoutedEventArgs e) => this.desk.FrontLeftActuatorExtend(this.progress);
 
-        private void FrontLeftDown_Click(object sender, RoutedEventArgs e) => this.desk.FrontLeftActuator.Retract(this.progress);
+        private void FrontLeftDown_Click(object sender, RoutedEventArgs e) => this.desk.FrontLeftActuatorRetract(this.progress);
 
-        private void BackLeftUp_Click(object sender, RoutedEventArgs e) => this.desk.BackLeftActuator.Extend(this.progress);
+        private void BackLeftUp_Click(object sender, RoutedEventArgs e) => this.desk.BackLeftActuatorExtend(this.progress);
 
-        private void BackLeftDown_Click(object sender, RoutedEventArgs e) => this.desk.BackLeftActuator.Retract(this.progress);
+        private void BackLeftDown_Click(object sender, RoutedEventArgs e) => this.desk.BackLeftActuatorRetract(this.progress);
 
-        private void FrontRightUp_Click(object sender, RoutedEventArgs e) => this.desk.FrontRightActuator.Extend(this.progress);
+        private void FrontRightUp_Click(object sender, RoutedEventArgs e) => this.desk.FrontRightActuatorExtend(this.progress);
 
-        private void FrontRightDown_Click(object sender, RoutedEventArgs e) => this.desk.FrontRightActuator.Retract(this.progress);
+        private void FrontRightDown_Click(object sender, RoutedEventArgs e) => this.desk.FrontRightActuatorRetract(this.progress);
 
-        private void BackRightUp_Click(object sender, RoutedEventArgs e) => this.desk.BackRightActuator.Extend(this.progress);
+        private void BackRightUp_Click(object sender, RoutedEventArgs e) => this.desk.BackRightActuatorExtend(this.progress);
 
-        private void BackRightDown_Click(object sender, RoutedEventArgs e) => this.desk.BackRightActuator.Retract(this.progress);
+        private void BackRightDown_Click(object sender, RoutedEventArgs e) => this.desk.BackRightActuatorRetract(this.progress);
 
         private void LogInfo(string text) => ((IProgress<Log>) this.progress).Report(Log.Info(text));
 

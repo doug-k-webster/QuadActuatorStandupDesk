@@ -9,7 +9,7 @@ namespace QASDUtil
         {
             Console.WriteLine("Quad Actuator Standup Desk Util!");
 
-            SystemTest.Testing();
+          //  SystemTest.Testing();
         }
     }
 }

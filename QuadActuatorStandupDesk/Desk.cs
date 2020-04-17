@@ -1,19 +1,22 @@
 ﻿namespace QuadActuatorStandupDesk
 {
     using System;
-    using System.Threading;
-
+    using System.Device.Gpio;
+    
     public class Desk
     {
-        private readonly PigpiodIf pigpiodIf;
-                
-        public Desk()
+        private static Desk instance = null;
+
+        private readonly GpioController controller;
+
+
+        private Desk()
         {
-            this.pigpiodIf = new PigpiodIf();
-            this.BackLeftActuator = new BackLeftActuator(this.pigpiodIf);
-            this.FrontLeftActuator = new FrontLeftActuator(this.pigpiodIf);
-            this.FrontRightActuator = new FrontRightActuator(this.pigpiodIf);
-            this.BackRightActuator = new BackRightActuator(this.pigpiodIf);
+            this.controller = new GpioController();
+            this.BackLeftActuator = new BackLeftActuator(this.controller);
+            this.FrontLeftActuator = new FrontLeftActuator(this.controller);
+            this.FrontRightActuator = new FrontRightActuator(this.controller);
+            this.BackRightActuator = new BackRightActuator(this.controller);
         }
 
         public BackLeftActuator BackLeftActuator { get; }
@@ -24,20 +27,29 @@
 
         public BackRightActuator BackRightActuator { get; }
 
+        bool initialized = false;
+
         public void Initialize(IProgress<Log> progress)
         {
-            pigpiodIf.pigpio_start("192.168.1.10", "8888", progress);
+            if(this.initialized)
+            {
+                return;
+            }
+
+            this.initialized = true;
+            this.BackRightActuator.Initialize(progress);
+            this.BackLeftActuator.Initialize(progress);
+            this.FrontLeftActuator.Initialize(progress);
+            this.FrontRightActuator.Initialize(progress);
+
         }
 
         public void Up(IProgress<Log> progress)
         {
             progress?.Report(Log.Debug("asking desk to go up..."));
             this.BackRightActuator.Extend(progress);
-            Thread.Sleep(5); 
             this.BackLeftActuator.Extend(progress);
-            Thread.Sleep(5); 
             this.FrontLeftActuator.Extend(progress);
-            Thread.Sleep(5); 
             this.FrontRightActuator.Extend(progress);
             progress?.Report(Log.Debug("desk going up"));
         }
@@ -46,11 +58,8 @@
         {
             progress?.Report(Log.Debug("asking desk to go down..."));
             this.BackRightActuator.Retract(progress);
-            Thread.Sleep(5);
             this.BackLeftActuator.Retract(progress);
-            Thread.Sleep(5); 
             this.FrontLeftActuator.Retract(progress);
-            Thread.Sleep(5); 
             this.FrontRightActuator.Retract(progress);
             progress?.Report(Log.Debug("desk going down"));
         }
@@ -59,11 +68,8 @@
         {
             progress?.Report(Log.Debug("stopping desk..."));
             this.BackLeftActuator.Stop(progress);
-            Thread.Sleep(5); 
             this.FrontLeftActuator.Stop(progress);
-            Thread.Sleep(5); 
             this.FrontRightActuator.Stop(progress);
-            Thread.Sleep(5); 
             this.BackRightActuator.Stop(progress);
             progress?.Report(Log.Debug("desk stopped"));
         }
@@ -86,6 +92,19 @@
             else
             {
                 progress.Report(Log.Warn($"Unknown command: {commandText}"));
+            }
+        }
+
+        public static Desk Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Desk();
+                }
+
+                return instance;
             }
         }
     }

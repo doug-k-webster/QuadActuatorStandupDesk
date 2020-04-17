@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Device.Gpio;
 
 namespace QuadActuatorStandupDesk
 {
     public abstract class Actuator
     {
-        private readonly PigpiodIf pigpiodIf;
+        private readonly GpioController controller;
 
-        protected Actuator(PigpiodIf pigpiodIf,string name, uint blackWirePin, uint redWirePin)
+        protected Actuator(GpioController pigpiodIf,string name, int blackWirePin, int redWirePin)
         {
-            this.pigpiodIf = pigpiodIf;
+            this.controller = pigpiodIf;
             Name = name;
             this.BlackWirePin = blackWirePin;
             this.RedWirePin = redWirePin;
@@ -18,32 +17,39 @@ namespace QuadActuatorStandupDesk
 
         public string Name { get; }
 
-        public uint BlackWirePin { get; }
+        public int BlackWirePin { get; }
 
-        public uint RedWirePin { get; }
+        public int RedWirePin { get; }
 
         public void Extend(IProgress<Log> progress)
         {
             progress?.Report(Log.Debug($"asking {this.Name} actuator to extend..."));
-            pigpiodIf.gpio_write(this.RedWirePin, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(this.BlackWirePin, PigpiodIf.PI_LOW);
+            controller.Write(this.RedWirePin, PinValue.High);
+            controller.Write(this.BlackWirePin, PinValue.Low);
             progress?.Report(Log.Debug($"{this.Name} actuator is extendenting."));
         }
 
         public void Retract(IProgress<Log> progress)
         {
             progress?.Report(Log.Debug($"asking {this.Name} actuator to retract..."));
-            pigpiodIf.gpio_write(this.RedWirePin, PigpiodIf.PI_LOW);
-            pigpiodIf.gpio_write(this.BlackWirePin, PigpiodIf.PI_HIGH);
+            controller.Write(this.RedWirePin, PinValue.Low);
+            controller.Write(this.BlackWirePin, PinValue.High);
             progress?.Report(Log.Debug($"{this.Name} actuator is retracting."));
         }
 
         public void Stop(IProgress<Log> progress)
         {
             progress?.Report(Log.Debug($"asking {this.Name} actuator to stop..."));
-            pigpiodIf.gpio_write(this.RedWirePin, PigpiodIf.PI_HIGH);
-            pigpiodIf.gpio_write(this.BlackWirePin, PigpiodIf.PI_HIGH);
+            controller.Write(this.RedWirePin, PinValue.High);
+            controller.Write(this.BlackWirePin, PinValue.High);
             progress?.Report(Log.Debug($"{this.Name} actuator is stopped."));
+        }
+
+        public void Initialize(IProgress<Log> progress)
+        {
+            progress?.Report(Log.Debug($"initializing {this.Name} actuator..."));
+            this.controller.OpenPin(this.RedWirePin, PinMode.Output);
+            this.controller.OpenPin(this.BlackWirePin, PinMode.Output);
         }
     }
 }
