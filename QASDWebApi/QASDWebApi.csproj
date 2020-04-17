@@ -3,9 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
+    <ItemGroup>
+        <PackageReference Include="Iot.Device.Bindings" Version="1.0.0" />
+        <PackageReference Include="System.Device.Gpio" Version="1.0.0" />
+    </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QuadActuatorStandupDesk\QuadActuatorStandupDesk.csproj" />
+    <ProjectReference Include="..\QASDCommon\QASDCommon.csproj" />
   </ItemGroup>
 
 

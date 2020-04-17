@@ -116,7 +116,7 @@ namespace QASDWebApi.Controllers
         [Route("FrontRightActuatorRetract")]
         public void FrontRightActuatorRetract()
         {
-            Desk.Instance.FrontRightActuator.Extend(this.progress);
+            Desk.Instance.FrontRightActuator.Retract(this.progress);
         }
 
         [HttpGet]

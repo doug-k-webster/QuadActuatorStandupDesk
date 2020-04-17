@@ -5,10 +5,13 @@
     
     public class Desk
     {
+        public float LoweredHeightInches = 29.5f;
+
         private static Desk instance = null;
 
         private readonly GpioController controller;
 
+        bool initialized = false;
 
         private Desk()
         {
@@ -27,7 +30,7 @@
 
         public BackRightActuator BackRightActuator { get; }
 
-        bool initialized = false;
+        public float Height => LoweredHeightInches + (this.FrontLeftActuator.CurrentExtensionInches + this.BackLeftActuator.CurrentExtensionInches + this.BackRightActuator.CurrentExtensionInches + this.FrontRightActuator.CurrentExtensionInches) / 4;
 
         public void Initialize(IProgress<Log> progress)
         {
@@ -53,6 +56,15 @@
             this.FrontRightActuator.Extend(progress);
             progress?.Report(Log.Debug("desk going up"));
         }
+
+        internal DeskStatus GetStatus() => new DeskStatus
+        {
+            FrontLeftActuatorState = this.FrontLeftActuator.GetStatus(),
+            BackLeftActuatorState = this.BackLeftActuator.GetStatus(),
+            BackRightActuatorState = this.BackRightActuator.GetStatus(),
+            FrontRightActuatorState = this.FrontRightActuator.GetStatus(),
+            Height = this.Height
+        };
 
         public void Down(IProgress<Log> progress)
         {

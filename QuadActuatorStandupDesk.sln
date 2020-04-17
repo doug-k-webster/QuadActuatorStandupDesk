@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuadActuatorStandupDesk", "QuadActuatorStandupDesk\QuadActuatorStandupDesk.csproj", "{F2AFAAE0-F82C-47BD-9FA6-541B5464496B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDUtil", "QASDUtil\QASDUtil.csproj", "{D72E488B-BD90-4295-95DB-1E04C4227665}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDWin", "QASDWin\QASDWin.csproj", "{AF1A4704-C3EC-4FB6-889C-1A369C67E1E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QASDWebApi", "QASDWebApi\QASDWebApi.csproj", "{E72DF630-D081-4EDB-9FE5-1663BE89C51E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDWebApi", "QASDWebApi\QASDWebApi.csproj", "{E72DF630-D081-4EDB-9FE5-1663BE89C51E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QASDCommon", "QASDCommon\QASDCommon.csproj", "{6DD461C3-D0A5-451A-8B4E-60A488A9F120}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F2AFAAE0-F82C-47BD-9FA6-541B5464496B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2AFAAE0-F82C-47BD-9FA6-541B5464496B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2AFAAE0-F82C-47BD-9FA6-541B5464496B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2AFAAE0-F82C-47BD-9FA6-541B5464496B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D72E488B-BD90-4295-95DB-1E04C4227665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D72E488B-BD90-4295-95DB-1E04C4227665}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D72E488B-BD90-4295-95DB-1E04C4227665}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E72DF630-D081-4EDB-9FE5-1663BE89C51E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DD461C3-D0A5-451A-8B4E-60A488A9F120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DD461C3-D0A5-451A-8B4E-60A488A9F120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DD461C3-D0A5-451A-8B4E-60A488A9F120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DD461C3-D0A5-451A-8B4E-60A488A9F120}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

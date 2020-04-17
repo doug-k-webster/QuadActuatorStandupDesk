@@ -2,75 +2,89 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace QASDWin
 {
     public class DeskClient
     {
-        internal void Initialize(Progress<Log> progress)
+        private readonly HttpClient httpClient;
+
+        public DeskClient()
         {
-            throw new NotImplementedException();
+            this.httpClient = new HttpClient();
         }
 
-        internal void Up(Progress<Log> progress)
+
+        internal Task Initialize(Progress<Log> progress)
         {
-            throw new NotImplementedException();
+            // no op
+            return Task.CompletedTask;
         }
 
-        internal void Down(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> Up(Progress<Log> progress) => this.SimpleDeskAction("up");
 
-        internal void Stop(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> Down(Progress<Log> progress) => this.SimpleDeskAction("down");
 
-        internal void FrontLeftActuatorExtend(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> Stop(Progress<Log> progress) => this.SimpleDeskAction("stop");
 
-        internal void FrontLeftActuatorRetract(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> FrontLeftActuatorExtend(Progress<Log> progress) => this.SimpleDeskAction("FrontLeftActuatorExtend");
 
-        internal void BackLeftActuatorExtend(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> FrontLeftActuatorRetract(Progress<Log> progress) => this.SimpleDeskAction("FrontLeftActuatorRetract");
 
-        internal void BackLeftActuatorRetract(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> BackLeftActuatorExtend(Progress<Log> progress) => this.SimpleDeskAction("BackLeftActuatorExtend");
 
-        internal void FrontRightActuatorExtend(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> BackLeftActuatorRetract(Progress<Log> progress) => this.SimpleDeskAction("BackLeftActuatorRetract");
 
-        internal void FrontRightActuatorRetract(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> FrontRightActuatorExtend(Progress<Log> progress) => this.SimpleDeskAction("FrontRightActuatorExtend");
 
-        internal void BackRightActuatorExtend(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> FrontRightActuatorRetract(Progress<Log> progress) => this.SimpleDeskAction("FrontRightActuatorRetract");
 
-        internal void BackRightActuatorRetract(Progress<Log> progress)
-        {
-            throw new NotImplementedException();
-        }
+        internal Task<ClientDeskStatus> BackRightActuatorExtend(Progress<Log> progress) => this.SimpleDeskAction("BackRightActuatorExtend");
 
-        internal void ExecuteCommand(string commandText, Progress<Log> progress)
+        internal Task<ClientDeskStatus> BackRightActuatorRetract(Progress<Log> progress) => this.SimpleDeskAction("BackRightActuatorRetract");
+
+        internal Task<ClientDeskStatus> ExecuteCommand(string commandText, Progress<Log> progress) => this.SimpleDeskAction($"ExecuteCommand?commandText=\"{commandText}\"");
+
+        public async Task<ClientDeskStatus> SimpleDeskAction(string action)
         {
-            throw new NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Get,
+                $"http://192.168.1.10:9999/desk/{action}");
+            request.Headers.Add("User-Agent", "QASDWin.DeskClient");
+
+            var response = await this.httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                //var deskStatus = await JsonSerializer.DeserializeAsync
+                //    <DeskStatus>(responseStream);
+
+                return new ClientDeskStatus
+                {
+                    //DeskStatus = deskStatus
+                };
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return new ClientDeskStatus
+                {
+                    HttpFault = true,
+                    HttpErrorMessage = content
+                };
+            }
         }
+    }
+
+    public class ClientDeskStatus
+    {
+        public DeskStatus DeskStatus { get; set; }
+
+        public bool HttpFault { get; set; }
+
+        public string HttpErrorMessage { get; set; }
     }
 }

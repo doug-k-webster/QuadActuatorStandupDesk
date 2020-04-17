@@ -57,6 +57,14 @@
             <Button Grid.Column="2" Click="AllStopButton_Click">
             <Path Style="{StaticResource StopGlyph}" Stroke="Black" Fill="Blue"  />
             </Button>
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Height" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Text="{Binding DeskHeight}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
             <Grid Grid.Column="4">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
