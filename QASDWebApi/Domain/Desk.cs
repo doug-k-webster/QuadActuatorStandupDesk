@@ -126,11 +126,12 @@
 
         internal DeskStatus GetStatus() => new DeskStatus
         {
-            FrontLeftActuatorState = this.FrontLeftActuator.GetStatus(),
-            BackLeftActuatorState = this.BackLeftActuator.GetStatus(),
-            BackRightActuatorState = this.BackRightActuator.GetStatus(),
-            FrontRightActuatorState = this.FrontRightActuator.GetStatus(),
-            Height = this.Height
+            FrontLeftActuatorState = this.FrontLeftActuator.GetStatus(this.AverageActuatorExtension),
+            BackLeftActuatorState = this.BackLeftActuator.GetStatus(this.AverageActuatorExtension),
+            BackRightActuatorState = this.BackRightActuator.GetStatus(this.AverageActuatorExtension),
+            FrontRightActuatorState = this.FrontRightActuator.GetStatus(this.AverageActuatorExtension),
+            Height = this.Height,
+            DeskState = this.DeskState
         };
 
         public void Down(IProgress<Log> progress)

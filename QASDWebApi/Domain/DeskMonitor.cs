@@ -41,8 +41,10 @@ namespace QASDWebApi.Domain
 
         public async Task Monitor()
         {
+            int i = 0;
             while (!_cancellationToken.IsCancellationRequested)
             {
+                i++;
                 // report desk status to the signal r hub
                 //QuadActuatorStandupDesk.Desk.Instance.BackLeftActuator.CurrentExtensionInches;
                 
@@ -50,7 +52,22 @@ namespace QASDWebApi.Domain
                 Desk.Instance.CorrectDeviatingActuators(this.progress);
 
                 var deskStatus = Desk.Instance.GetStatus();
-                //this.logger.LogInformation($"back left: {deskStatus.BackLeftActuatorState.Height}");
+                if(i%10==0 && deskStatus.DeskState != DeskState.Stopped)
+                {
+                    var fr = deskStatus.FrontRightActuatorState;
+                    var fl = deskStatus.FrontLeftActuatorState;
+                    var br = deskStatus.BackRightActuatorState;
+                    var bl = deskStatus.BackLeftActuatorState;
+                    string debugText = @$"
+BL {bl.Height} ({bl.DeviationFromAverage})                BR {br.Height} ({br.DeviationFromAverage})
+
+
+FL {fl.Height} ({fl.DeviationFromAverage})                FR {fr.Height} ({fr.DeviationFromAverage})
+";
+                    this.logger.LogInformation(debugText);
+                }
+
+                
                 //this.logger.LogInformation($"front left: {deskStatus.FrontLeftActuatorState.Height}");
                 //this.logger.LogInformation($"back left: {deskStatus.BackRightActuatorState.Height}");
                 //this.logger.LogInformation($"front right: {deskStatus.FrontRightActuatorState.Height}");

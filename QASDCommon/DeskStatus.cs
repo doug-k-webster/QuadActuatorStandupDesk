@@ -10,6 +10,8 @@ namespace QuadActuatorStandupDesk
 
         public float Height { get; set; }
 
+        public DeskState DeskState { get; set; }
+
         public ActuatorStatus FrontLeftActuatorState { get; set; }
 
         public ActuatorStatus BackLeftActuatorState { get; set; }
@@ -17,12 +19,5 @@ namespace QuadActuatorStandupDesk
         public ActuatorStatus BackRightActuatorState { get; set; }
 
         public ActuatorStatus FrontRightActuatorState { get; set; }
-    }
-
-    public class ActuatorStatus
-    {
-        public ActuatorState ActuatorState { get; set; }
-
-        public float Height { get; set; }
     }
 }

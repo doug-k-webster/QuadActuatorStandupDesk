@@ -83,10 +83,11 @@ namespace QuadActuatorStandupDesk
         }
 
 
-        internal ActuatorStatus GetStatus() => new ActuatorStatus
+        internal ActuatorStatus GetStatus(float averageActuatorExtension) => new ActuatorStatus
         {
             ActuatorState = this.ActuatorState,
-            Height = this.CurrentExtensionInches
+            Height = this.CurrentExtensionInches,
+            DeviationFromAverage = this.CurrentExtensionInches - averageActuatorExtension
         };
     }
 }
