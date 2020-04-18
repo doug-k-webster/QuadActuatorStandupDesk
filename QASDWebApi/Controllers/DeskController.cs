@@ -46,7 +46,7 @@ namespace QASDWebApi.Controllers
                 default:
                     this.logger.LogInformation(e.Text);
                     break;
-            }                        
+            }
         }
 
         [HttpGet]

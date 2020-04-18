@@ -34,12 +34,12 @@ namespace QuadActuatorStandupDesk
 
         public abstract TimeSpan TimeToRetract { get; }
 
-        public float ExtensionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / this.TimeToExtend.Milliseconds;
+        public float ExtensionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float)this.TimeToExtend.TotalMilliseconds;
 
-        public float RetractionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / this.TimeToRetract.Milliseconds;
+        public float RetractionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float)this.TimeToRetract.TotalMilliseconds;
 
-        public float CurrentExtensionInches => ((this.extensionStopwatch.ElapsedMilliseconds * this.ExtensionSpeedInchesPerSecond)
-            - (this.retractionStopwatch.ElapsedMilliseconds * this.RetractionSpeedInchesPerSecond)) / 1000;
+        public float CurrentExtensionInches => (this.extensionStopwatch.ElapsedMilliseconds * this.ExtensionSpeedInchesPerSecond / 1000)
+            - (this.retractionStopwatch.ElapsedMilliseconds * this.RetractionSpeedInchesPerSecond / 1000);
         
         public void Extend(IProgress<Log> progress)
         {
