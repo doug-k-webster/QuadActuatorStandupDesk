@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Device.Gpio;
 using System.Diagnostics;
 
@@ -13,6 +14,8 @@ namespace QuadActuatorStandupDesk
         private Stopwatch extensionStopwatch = new Stopwatch();
 
         private Stopwatch retractionStopwatch = new Stopwatch();
+
+        private float startingExtension = 0;
 
         protected Actuator(GpioController controller,string name, int blackWirePin, int redWirePin)
         {
@@ -38,50 +41,49 @@ namespace QuadActuatorStandupDesk
 
         public float RetractionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float)this.TimeToRetract.TotalMilliseconds;
 
-        public float CurrentExtensionInches => (this.extensionStopwatch.ElapsedMilliseconds * this.ExtensionSpeedInchesPerSecond / 1000)
+        public float CurrentExtensionInches => this.startingExtension + (this.extensionStopwatch.ElapsedMilliseconds * this.ExtensionSpeedInchesPerSecond / 1000)
             - (this.retractionStopwatch.ElapsedMilliseconds * this.RetractionSpeedInchesPerSecond / 1000);
         
-        public void Extend(IProgress<Log> progress)
+        public void Extend(ILogger logger)
         {
-            progress?.Report(Log.Debug($"asking {this.Name} actuator to extend..."));
+            logger?.LogDebug($"asking {this.Name} actuator to extend...");
             controller.Write(this.RedWirePin, PinValue.High);
             controller.Write(this.BlackWirePin, PinValue.Low);
             this.extensionStopwatch.Start();
             this.retractionStopwatch.Stop();
             this.ActuatorState = ActuatorState.Extending;
-            progress?.Report(Log.Debug($"{this.Name} actuator is extendenting."));
+            logger?.LogDebug($"{this.Name} actuator is extendenting.");
         }
 
-        public void Retract(IProgress<Log> progress)
+        public void Retract(ILogger logger)
         {
-            progress?.Report(Log.Debug($"asking {this.Name} actuator to retract..."));
+            logger?.LogDebug($"asking {this.Name} actuator to retract...");
             controller.Write(this.RedWirePin, PinValue.Low);
             controller.Write(this.BlackWirePin, PinValue.High);
             this.extensionStopwatch.Stop();
             this.retractionStopwatch.Start();
             this.ActuatorState = ActuatorState.Retracting;
-            progress?.Report(Log.Debug($"{this.Name} actuator is retracting."));
+            logger?.LogDebug($"{this.Name} actuator is retracting.");
         }
 
-        public void Stop(IProgress<Log> progress)
+        public void Stop(ILogger logger)
         {
-            progress?.Report(Log.Debug($"asking {this.Name} actuator to stop..."));
+            logger?.LogDebug($"asking {this.Name} actuator to stop...");
             controller.Write(this.RedWirePin, PinValue.High);
             controller.Write(this.BlackWirePin, PinValue.High);
             this.extensionStopwatch.Stop();
             this.retractionStopwatch.Stop();
             this.ActuatorState = ActuatorState.Stopped;
-            progress?.Report(Log.Debug($"{this.Name} actuator is stopped."));
+            logger?.LogDebug($"{this.Name} actuator is stopped.");
         }
 
-        public void Initialize(IProgress<Log> progress)
+        public void Initialize(ILogger logger)
         {
-            progress?.Report(Log.Debug($"initializing {this.Name} actuator..."));
+            logger?.LogDebug($"initializing {this.Name} actuator...");
             this.controller.OpenPin(this.RedWirePin, PinMode.Output);
             this.controller.OpenPin(this.BlackWirePin, PinMode.Output);
             this.ActuatorState = ActuatorState.Stopped;
         }
-
 
         internal ActuatorStatus GetStatus(float averageActuatorExtension) => new ActuatorStatus
         {
@@ -89,5 +91,13 @@ namespace QuadActuatorStandupDesk
             Height = this.CurrentExtensionInches,
             DeviationFromAverage = this.CurrentExtensionInches - averageActuatorExtension
         };
+
+        internal void SetExtension(ILogger progress, float extension)
+        {
+            this.Stop(progress);
+            this.startingExtension = extension;
+            this.extensionStopwatch.Reset();
+            this.retractionStopwatch.Reset();
+        }
     }
 }

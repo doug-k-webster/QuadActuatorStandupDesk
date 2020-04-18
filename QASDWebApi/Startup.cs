@@ -29,11 +29,20 @@ namespace QASDWebApi
             services.AddControllers();
             services.AddSignalR();
             services.AddSingleton<DeskMonitor>();
+
+
+            services.AddLogging(builder =>
+            {
+                builder.SetMinimumLevel(LogLevel.Debug);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+                          ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("qasdlog-{Date}.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

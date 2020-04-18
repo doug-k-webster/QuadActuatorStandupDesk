@@ -1,5 +1,7 @@
 ﻿namespace QuadActuatorStandupDesk
 {
+    using Microsoft.Extensions.Logging;
+    using QASDCommon;
     using System;
     using System.Collections.Generic;
     using System.Device.Gpio;
@@ -11,7 +13,7 @@
 
         public const float RaisedHeightInches = 47f;
 
-        public const float MaxAcuatorDeviationAllowed = 0.5f;
+        public const float MaxAcuatorDeviationAllowed = 0.25f;
 
         private static Desk instance = null;
 
@@ -47,7 +49,7 @@
 
         public DeskState DeskState { get; private set; }
 
-        public void Initialize(IProgress<Log> progress)
+        public void Initialize(ILogger logger)
         {
             if(this.initialized)
             {
@@ -55,14 +57,14 @@
             }
 
             this.initialized = true;
-            this.BackRightActuator.Initialize(progress);
-            this.BackLeftActuator.Initialize(progress);
-            this.FrontLeftActuator.Initialize(progress);
-            this.FrontRightActuator.Initialize(progress);
+            this.BackRightActuator.Initialize(logger);
+            this.BackLeftActuator.Initialize(logger);
+            this.FrontLeftActuator.Initialize(logger);
+            this.FrontRightActuator.Initialize(logger);
             this.DeskState = DeskState.Stopped;
         }
 
-        internal void CorrectDeviatingActuators(IProgress<Log> progress)
+        internal void CorrectDeviatingActuators(ILogger logger)
         {
             if (this.DeskState == DeskState.Raising)
             {
@@ -70,20 +72,22 @@
                 {
                     if (this.GetActuatorDeviation(actuator) > MaxAcuatorDeviationAllowed  && actuator.ActuatorState == ActuatorState.Extending)
                     {
-                        progress?.Report(Log.Warn($"{actuator.Name} actuator is deviating up, correcting..."));
-                        actuator.Stop(progress);
+                        logger?.LogInformation($"{actuator.Name} actuator is deviating up, correcting...");
+                        actuator.Stop(logger);
                     }
 
                     if (this.GetActuatorDeviation(actuator) < 0 && actuator.ActuatorState == ActuatorState.Stopped)
                     {
-                        actuator.Extend(progress);
+                        logger?.LogInformation($"{actuator.Name} actuator has resumed extending...");
+                        actuator.Extend(logger);
                     }
                 }
 
-                if (this.Height > RaisedHeightInches)
+                if (this.Height > RaisedHeightInches + 1)
                 {
-                    progress?.Report(Log.Info($"desk fully raised. stopping..."));
-                    this.Stop(progress);
+                    logger?.LogInformation($"desk fully raised. stopping...");
+                    this.Stop(logger);
+                    this.SetHeight(logger, RaisedHeightInches);
                 }
             }
 
@@ -93,35 +97,37 @@
                 {
                     if (this.GetActuatorDeviation(actuator) < -MaxAcuatorDeviationAllowed && actuator.ActuatorState == ActuatorState.Retracting)
                     {
-                        progress?.Report(Log.Warn($"{actuator.Name} actuator is deviating down, correcting..."));
-                        actuator.Stop(progress);
+                        logger?.LogInformation($"{actuator.Name} actuator is deviating down, correcting...");
+                        actuator.Stop(logger);
                     }
 
                     if (this.GetActuatorDeviation(actuator) > 0 && actuator.ActuatorState == ActuatorState.Stopped)
                     {
-                        actuator.Retract(progress);
+                        logger?.LogInformation($"{actuator.Name} actuator has resumed retracting...");
+                        actuator.Retract(logger);
                     }
                 }
 
-                if (this.Height < LoweredHeightInches)
+                if (this.Height < LoweredHeightInches - 1)
                 {
-                    progress?.Report(Log.Info($"desk fully lowered. stopping..."));
-                    this.Stop(progress);
+                    logger?.LogInformation($"desk fully lowered. stopping...");
+                    this.Stop(logger);
+                    this.SetHeight(logger, LoweredHeightInches);
                 }
             }
         }
 
         internal float GetActuatorDeviation(Actuator actuator) => actuator.CurrentExtensionInches + LoweredHeightInches - this.Height;
 
-        public void Up(IProgress<Log> progress)
+        public void Up(ILogger logger)
         {
-            progress?.Report(Log.Debug("asking desk to go up..."));
-            this.BackRightActuator.Extend(progress);
-            this.BackLeftActuator.Extend(progress);
-            this.FrontLeftActuator.Extend(progress);
-            this.FrontRightActuator.Extend(progress);
+            logger?.LogDebug("asking desk to go up...");
+            this.BackRightActuator.Extend(logger);
+            this.BackLeftActuator.Extend(logger);
+            this.FrontLeftActuator.Extend(logger);
+            this.FrontRightActuator.Extend(logger);
             this.DeskState = DeskState.Raising;
-            progress?.Report(Log.Debug("desk going up"));
+            logger?.LogDebug("desk going up");
         }
 
         internal DeskStatus GetStatus() => new DeskStatus
@@ -134,46 +140,95 @@
             DeskState = this.DeskState
         };
 
-        public void Down(IProgress<Log> progress)
+        public void Down(ILogger logger)
         {
-            progress?.Report(Log.Debug("asking desk to go down..."));
-            this.BackRightActuator.Retract(progress);
-            this.BackLeftActuator.Retract(progress);
-            this.FrontLeftActuator.Retract(progress);
-            this.FrontRightActuator.Retract(progress);
+            logger?.LogDebug("asking desk to go down...");
+            this.BackRightActuator.Retract(logger);
+            this.BackLeftActuator.Retract(logger);
+            this.FrontLeftActuator.Retract(logger);
+            this.FrontRightActuator.Retract(logger);
             this.DeskState = DeskState.Lowering;
-            progress?.Report(Log.Debug("desk going down"));
+            logger?.LogDebug("desk going down");
         }
 
-        public void Stop(IProgress<Log> progress)
+        public void Stop(ILogger logger)
         {
-            progress?.Report(Log.Debug("stopping desk..."));
-            this.BackLeftActuator.Stop(progress);
-            this.FrontLeftActuator.Stop(progress);
-            this.FrontRightActuator.Stop(progress);
-            this.BackRightActuator.Stop(progress);
+            logger?.LogDebug("stopping desk...");
+            this.BackLeftActuator.Stop(logger);
+            this.FrontLeftActuator.Stop(logger);
+            this.FrontRightActuator.Stop(logger);
+            this.BackRightActuator.Stop(logger);
             this.DeskState = DeskState.Stopped;
-            progress?.Report(Log.Debug("desk stopped"));
+            logger?.LogDebug("desk stopped");
         }
 
-        public void ExecuteCommand(string commandText, IProgress<Log> progress)
+        public ExecuteCommandResult ExecuteCommand(string commandText, ILogger logger)
         {
+            var result = new ExecuteCommandResult();
+
             // just a simple command interpreter here
-            if (commandText == "up")
+            if (commandText.ToUpperInvariant() == "UP")
             {
-                this.Up(progress);
+                this.Up(logger);
             }
-            else if (commandText == "down")
+            else if (commandText.ToUpperInvariant() == "DOWN")
             {
-                this.Down(progress);
+                this.Down(logger);
             }
-            else if (commandText == "stop")
+            else if (commandText.ToUpperInvariant() == "STOP")
             {
-                this.Stop(progress);
+                this.Stop(logger);
+            }
+            else if (commandText.ToUpperInvariant().StartsWith("SETHEIGHT "))
+            {
+                var commandParts = commandText.Split(" ");
+
+                if (commandParts.Length != 2)
+                {
+                    result.IsError = true;
+                    result.Message = "The setheight command should have a single parameter between 29.5 and 47 inclusive";
+                    logger.LogWarning(result.Message);
+                    return result;
+                }
+
+                var heightPart = commandParts[1];
+
+                if (!float.TryParse(heightPart, out var height))
+                {
+                    result.IsError = true;
+                    result.Message = $"Could not parse the height value {heightPart} as a float";
+                    logger.LogWarning(result.Message);
+                    return result;
+                }
+
+                if (height < 29.5f || height > 47f)
+                {
+                    result.IsError = true;
+                    result.Message = $"The height value {height} is outside the acceptable range of 29.5 to 47";
+                    logger.LogWarning(result.Message);
+                    return result;
+                }
+
+                this.SetHeight(logger, height);
+                result.Message = $"Height changed to {height}";
+                logger.LogWarning(result.Message);
+                return result;
             }
             else
             {
-                progress.Report(Log.Warn($"Unknown command: {commandText}"));
+                result.IsError = true;
+                result.Message = $"Unknown command: {commandText}";
+                logger.LogWarning(result.Message);
+            }
+
+            return result;
+        }
+
+        private void SetHeight(ILogger progress, float height)
+        {
+            foreach(var actuator in this.actuators)
+            {
+                actuator.Value.SetExtension(progress, height - LoweredHeightInches);
             }
         }
 

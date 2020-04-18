@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDWin", "QASDWin\QASDWin.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDWebApi", "QASDWebApi\QASDWebApi.csproj", "{E72DF630-D081-4EDB-9FE5-1663BE89C51E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QASDCommon", "QASDCommon\QASDCommon.csproj", "{6DD461C3-D0A5-451A-8B4E-60A488A9F120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QASDCommon", "QASDCommon\QASDCommon.csproj", "{6DD461C3-D0A5-451A-8B4E-60A488A9F120}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A1229E0-A52F-4925-918E-BA3A527A84D8}"
+	ProjectSection(SolutionItems) = preProject
+		TODO.txt = TODO.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

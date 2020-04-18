@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using QASDCommon;
 using QuadActuatorStandupDesk;
 
 namespace QASDWebApi.Controllers
@@ -14,39 +15,10 @@ namespace QASDWebApi.Controllers
     {
         private readonly ILogger<DeskController> logger;
 
-        private readonly Progress<Log> progress;
-
         public DeskController(ILogger<DeskController> logger)
         {
             this.logger = logger;
-            this.progress = new Progress<Log>();
-            this.progress.ProgressChanged += Progress_ProgressChanged;
-            Desk.Instance.Initialize(this.progress);
-        }
-
-        private void Progress_ProgressChanged(object sender, Log e)
-        {
-            switch(e.LogLevel)
-            {
-                case 0:
-                    this.logger.LogDebug(e.Text);
-                    break;
-                case 1:
-                    this.logger.LogInformation(e.Text);
-                    break;
-                case 2:
-                    this.logger.LogWarning(e.Text);
-                    break;
-                case 3:
-                    this.logger.LogError(e.Text);
-                    break;
-                case 4:
-                    this.logger.LogCritical(e.Text);
-                    break;
-                default:
-                    this.logger.LogInformation(e.Text);
-                    break;
-            }
+                        Desk.Instance.Initialize(this.logger);
         }
 
         [HttpGet]
@@ -54,7 +26,7 @@ namespace QASDWebApi.Controllers
         public string Down()
         {
             this.logger.LogInformation("Going down...");
-            Desk.Instance.Down(this.progress);
+            Desk.Instance.Down(this.logger);
             return "Ok";
         }
 
@@ -63,7 +35,7 @@ namespace QASDWebApi.Controllers
         public string Up()
         {
             this.logger.LogInformation("Going up...");
-            Desk.Instance.Up(this.progress);
+            Desk.Instance.Up(this.logger);
             return "Ok";
         }
 
@@ -72,7 +44,7 @@ namespace QASDWebApi.Controllers
         public string Stop()
         {
             this.logger.LogInformation("Stopping...");
-            Desk.Instance.Stop(this.progress);
+            Desk.Instance.Stop(this.logger);
             return "Ok";
         }
 
@@ -81,63 +53,63 @@ namespace QASDWebApi.Controllers
 
         public void FrontLeftActuatorExtend()
         {
-            Desk.Instance.FrontLeftActuator.Extend(this.progress);
+            Desk.Instance.FrontLeftActuator.Extend(this.logger);
         }
 
         [HttpGet]
         [Route("FrontLeftActuatorRetract")]
         public void FrontLeftActuatorRetract()
         {
-            Desk.Instance.FrontLeftActuator.Retract(this.progress);
+            Desk.Instance.FrontLeftActuator.Retract(this.logger);
         }
 
         [HttpGet]
         [Route("BackLeftActuatorExtend")]
         public void BackLeftActuatorExtend()
         {
-            Desk.Instance.BackLeftActuator.Extend(this.progress);
+            Desk.Instance.BackLeftActuator.Extend(this.logger);
         }
 
         [HttpGet]
         [Route("BackLeftActuatorRetract")]
         public void BackLeftActuatorRetract()
         {
-            Desk.Instance.BackLeftActuator.Retract(this.progress);
+            Desk.Instance.BackLeftActuator.Retract(this.logger);
         }
 
         [HttpGet]
         [Route("FrontRightActuatorExtend")]
         public void FrontRightActuatorExtend()
         {
-            Desk.Instance.FrontRightActuator.Extend(this.progress);
+            Desk.Instance.FrontRightActuator.Extend(this.logger);
         }
 
         [HttpGet]
         [Route("FrontRightActuatorRetract")]
         public void FrontRightActuatorRetract()
         {
-            Desk.Instance.FrontRightActuator.Retract(this.progress);
+            Desk.Instance.FrontRightActuator.Retract(this.logger);
         }
 
         [HttpGet]
         [Route("BackRightActuatorExtend")]
         public void BackRightActuatorExtend()
         {
-            Desk.Instance.BackRightActuator.Extend(this.progress);
+            Desk.Instance.BackRightActuator.Extend(this.logger);
         }
 
         [HttpGet]
         [Route("BackRightActuatorRetract")]
         public void BackRightActuatorRetract()
         {
-            Desk.Instance.BackRightActuator.Retract(this.progress);
+            Desk.Instance.BackRightActuator.Retract(this.logger);
         }
 
         [HttpGet]
         [Route("ExecuteCommand")]
-        public void ExecuteCommand(string commandText)
+        public ExecuteCommandResult ExecuteCommand(string commandText)
         {
-            Desk.Instance.ExecuteCommand(commandText, this.progress);
+            return Desk.Instance.ExecuteCommand(commandText, this.logger);
         }
     }
 }
