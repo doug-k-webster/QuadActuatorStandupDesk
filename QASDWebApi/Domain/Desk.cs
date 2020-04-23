@@ -1,11 +1,13 @@
-﻿namespace QuadActuatorStandupDesk
+﻿namespace QASDWebApi.Domain
 {
-    using Microsoft.Extensions.Logging;
-    using QASDCommon;
     using System;
     using System.Collections.Generic;
     using System.Device.Gpio;
     using System.Linq;
+
+    using Microsoft.Extensions.Logging;
+
+    using QASDCommon;
 
     public class Desk
     {
@@ -17,9 +19,9 @@
 
         private static Desk instance = null;
 
-        private readonly GpioController controller;
-
         private readonly Dictionary<Type, Actuator> actuators;
+
+        private readonly GpioController controller;
 
         bool initialized = false;
 
@@ -28,10 +30,10 @@
             this.controller = new GpioController();
             this.actuators = new Dictionary<Type, Actuator>
             {
-                { typeof(BackLeftActuator), new BackLeftActuator(this.controller) },
-                { typeof(FrontLeftActuator), new FrontLeftActuator(this.controller) },
-                { typeof(FrontRightActuator), new FrontRightActuator(this.controller) },
-                { typeof(BackRightActuator), new BackRightActuator(this.controller) }
+                {typeof(BackLeftActuator), new BackLeftActuator(this.controller)},
+                {typeof(FrontLeftActuator), new FrontLeftActuator(this.controller)},
+                {typeof(FrontRightActuator), new FrontRightActuator(this.controller)},
+                {typeof(BackRightActuator), new BackRightActuator(this.controller)}
             };
         }
 
@@ -43,15 +45,28 @@
 
         public Actuator BackRightActuator => this.actuators[typeof(BackRightActuator)];
 
-        public float Height => LoweredHeightInches + AverageActuatorExtension;
+        public float Height => LoweredHeightInches + this.AverageActuatorExtension;
 
         public float AverageActuatorExtension => this.actuators.Average(a => a.Value.CurrentExtensionInches);
 
         public DeskState DeskState { get; private set; }
 
+        public static Desk Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Desk();
+                }
+
+                return instance;
+            }
+        }
+
         public void Initialize(ILogger logger)
         {
-            if(this.initialized)
+            if (this.initialized)
             {
                 return;
             }
@@ -68,15 +83,17 @@
         {
             if (this.DeskState == DeskState.Raising)
             {
-                foreach(var actuator in this.actuators.Select(kvp=>kvp.Value))
+                foreach (var actuator in this.actuators.Select(kvp => kvp.Value))
                 {
-                    if (this.GetActuatorDeviation(actuator) > MaxAcuatorDeviationAllowed  && actuator.ActuatorState == ActuatorState.Extending)
+                    if (this.GetActuatorDeviation(actuator) > MaxAcuatorDeviationAllowed
+                        && actuator.ActuatorState == ActuatorState.Extending)
                     {
                         logger?.LogInformation($"{actuator.Name} actuator is deviating up, correcting...");
                         actuator.Stop(logger);
                     }
 
-                    if (this.GetActuatorDeviation(actuator) < 0 && actuator.ActuatorState == ActuatorState.Stopped)
+                    if (this.GetActuatorDeviation(actuator) < 0
+                        && actuator.ActuatorState == ActuatorState.Stopped)
                     {
                         logger?.LogInformation($"{actuator.Name} actuator has resumed extending...");
                         actuator.Extend(logger);
@@ -95,13 +112,15 @@
             {
                 foreach (var actuator in this.actuators.Select(kvp => kvp.Value))
                 {
-                    if (this.GetActuatorDeviation(actuator) < -MaxAcuatorDeviationAllowed && actuator.ActuatorState == ActuatorState.Retracting)
+                    if (this.GetActuatorDeviation(actuator) < -MaxAcuatorDeviationAllowed
+                        && actuator.ActuatorState == ActuatorState.Retracting)
                     {
                         logger?.LogInformation($"{actuator.Name} actuator is deviating down, correcting...");
                         actuator.Stop(logger);
                     }
 
-                    if (this.GetActuatorDeviation(actuator) > 0 && actuator.ActuatorState == ActuatorState.Stopped)
+                    if (this.GetActuatorDeviation(actuator) > 0
+                        && actuator.ActuatorState == ActuatorState.Stopped)
                     {
                         logger?.LogInformation($"{actuator.Name} actuator has resumed retracting...");
                         actuator.Retract(logger);
@@ -130,15 +149,16 @@
             logger?.LogDebug("desk going up");
         }
 
-        internal DeskStatus GetStatus() => new DeskStatus
-        {
-            FrontLeftActuatorState = this.FrontLeftActuator.GetStatus(this.AverageActuatorExtension),
-            BackLeftActuatorState = this.BackLeftActuator.GetStatus(this.AverageActuatorExtension),
-            BackRightActuatorState = this.BackRightActuator.GetStatus(this.AverageActuatorExtension),
-            FrontRightActuatorState = this.FrontRightActuator.GetStatus(this.AverageActuatorExtension),
-            Height = this.Height,
-            DeskState = this.DeskState
-        };
+        internal DeskStatus GetStatus() =>
+            new DeskStatus
+            {
+                FrontLeftActuatorState = this.FrontLeftActuator.GetStatus(this.AverageActuatorExtension),
+                BackLeftActuatorState = this.BackLeftActuator.GetStatus(this.AverageActuatorExtension),
+                BackRightActuatorState = this.BackRightActuator.GetStatus(this.AverageActuatorExtension),
+                FrontRightActuatorState = this.FrontRightActuator.GetStatus(this.AverageActuatorExtension),
+                Height = this.Height,
+                DeskState = this.DeskState
+            };
 
         public void Down(ILogger logger)
         {
@@ -179,7 +199,8 @@
             {
                 this.Stop(logger);
             }
-            else if (commandText.ToUpperInvariant().StartsWith("SETHEIGHT "))
+            else if (commandText.ToUpperInvariant()
+                .StartsWith("SETHEIGHT "))
             {
                 var commandParts = commandText.Split(" ");
 
@@ -201,7 +222,8 @@
                     return result;
                 }
 
-                if (height < 29.5f || height > 47f)
+                if (height < 29.5f
+                    || height > 47f)
                 {
                     result.IsError = true;
                     result.Message = $"The height value {height} is outside the acceptable range of 29.5 to 47";
@@ -226,22 +248,9 @@
 
         private void SetHeight(ILogger progress, float height)
         {
-            foreach(var actuator in this.actuators)
+            foreach (var actuator in this.actuators)
             {
                 actuator.Value.SetExtension(progress, height - LoweredHeightInches);
-            }
-        }
-
-        public static Desk Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Desk();
-                }
-
-                return instance;
             }
         }
     }

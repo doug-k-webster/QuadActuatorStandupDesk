@@ -2,4 +2,3 @@ Hookup command interface on UI
 Get logging working in DeskMonitor
 Show individual actuator status in UI
 Show individual actuator status in UI with visualization
-Fix retraction bug where front left gets stuck

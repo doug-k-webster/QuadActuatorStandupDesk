@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using QASDCommon;
-using QuadActuatorStandupDesk;
-
-namespace QASDWebApi.Controllers
+﻿namespace QASDWebApi.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
+    using QASDCommon;
+
+    using QASDWebApi.Domain;
+
     [ApiController]
     [Route("[controller]")]
     public class DeskController : ControllerBase
@@ -18,7 +16,7 @@ namespace QASDWebApi.Controllers
         public DeskController(ILogger<DeskController> logger)
         {
             this.logger = logger;
-                        Desk.Instance.Initialize(this.logger);
+            Desk.Instance.Initialize(this.logger);
         }
 
         [HttpGet]
@@ -50,7 +48,6 @@ namespace QASDWebApi.Controllers
 
         [HttpGet]
         [Route("FrontLeftActuatorExtend")]
-
         public void FrontLeftActuatorExtend()
         {
             Desk.Instance.FrontLeftActuator.Extend(this.logger);

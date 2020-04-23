@@ -1,23 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Device.Gpio;
-using System.Diagnostics;
-
-namespace QuadActuatorStandupDesk
+﻿namespace QASDWebApi.Domain
 {
+    using System;
+    using System.Device.Gpio;
+    using System.Diagnostics;
+
+    using Microsoft.Extensions.Logging;
+
+    using QASDCommon;
+
     public abstract class Actuator
     {
         public const float MaximumExtensionInches = 18.0f;
 
         private readonly GpioController controller;
 
-        private Stopwatch extensionStopwatch = new Stopwatch();
+        private readonly Stopwatch extensionStopwatch = new Stopwatch();
 
-        private Stopwatch retractionStopwatch = new Stopwatch();
+        private readonly Stopwatch retractionStopwatch = new Stopwatch();
 
         private float startingExtension = 0;
 
-        protected Actuator(GpioController controller,string name, int blackWirePin, int redWirePin)
+        protected Actuator(GpioController controller, string name, int blackWirePin, int redWirePin)
         {
             this.controller = controller;
             this.Name = name;
@@ -37,18 +40,19 @@ namespace QuadActuatorStandupDesk
 
         public abstract TimeSpan TimeToRetract { get; }
 
-        public float ExtensionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float)this.TimeToExtend.TotalMilliseconds;
+        public float ExtensionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float) this.TimeToExtend.TotalMilliseconds;
 
-        public float RetractionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float)this.TimeToRetract.TotalMilliseconds;
+        public float RetractionSpeedInchesPerSecond => MaximumExtensionInches * 1000 / (float) this.TimeToRetract.TotalMilliseconds;
 
-        public float CurrentExtensionInches => this.startingExtension + (this.extensionStopwatch.ElapsedMilliseconds * this.ExtensionSpeedInchesPerSecond / 1000)
+        public float CurrentExtensionInches =>
+            this.startingExtension + (this.extensionStopwatch.ElapsedMilliseconds * this.ExtensionSpeedInchesPerSecond / 1000)
             - (this.retractionStopwatch.ElapsedMilliseconds * this.RetractionSpeedInchesPerSecond / 1000);
-        
+
         public void Extend(ILogger logger)
         {
             logger?.LogDebug($"asking {this.Name} actuator to extend...");
-            controller.Write(this.RedWirePin, PinValue.High);
-            controller.Write(this.BlackWirePin, PinValue.Low);
+            this.controller.Write(this.RedWirePin, PinValue.High);
+            this.controller.Write(this.BlackWirePin, PinValue.Low);
             this.extensionStopwatch.Start();
             this.retractionStopwatch.Stop();
             this.ActuatorState = ActuatorState.Extending;
@@ -58,8 +62,8 @@ namespace QuadActuatorStandupDesk
         public void Retract(ILogger logger)
         {
             logger?.LogDebug($"asking {this.Name} actuator to retract...");
-            controller.Write(this.RedWirePin, PinValue.Low);
-            controller.Write(this.BlackWirePin, PinValue.High);
+            this.controller.Write(this.RedWirePin, PinValue.Low);
+            this.controller.Write(this.BlackWirePin, PinValue.High);
             this.extensionStopwatch.Stop();
             this.retractionStopwatch.Start();
             this.ActuatorState = ActuatorState.Retracting;
@@ -69,8 +73,8 @@ namespace QuadActuatorStandupDesk
         public void Stop(ILogger logger)
         {
             logger?.LogDebug($"asking {this.Name} actuator to stop...");
-            controller.Write(this.RedWirePin, PinValue.High);
-            controller.Write(this.BlackWirePin, PinValue.High);
+            this.controller.Write(this.RedWirePin, PinValue.High);
+            this.controller.Write(this.BlackWirePin, PinValue.High);
             this.extensionStopwatch.Stop();
             this.retractionStopwatch.Stop();
             this.ActuatorState = ActuatorState.Stopped;
@@ -85,12 +89,13 @@ namespace QuadActuatorStandupDesk
             this.ActuatorState = ActuatorState.Stopped;
         }
 
-        internal ActuatorStatus GetStatus(float averageActuatorExtension) => new ActuatorStatus
-        {
-            ActuatorState = this.ActuatorState,
-            Height = this.CurrentExtensionInches,
-            DeviationFromAverage = this.CurrentExtensionInches - averageActuatorExtension
-        };
+        internal ActuatorStatus GetStatus(float averageActuatorExtension) =>
+            new ActuatorStatus
+            {
+                ActuatorState = this.ActuatorState,
+                Height = this.CurrentExtensionInches,
+                DeviationFromAverage = this.CurrentExtensionInches - averageActuatorExtension
+            };
 
         internal void SetExtension(ILogger progress, float extension)
         {

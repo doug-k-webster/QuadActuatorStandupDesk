@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using QuadActuatorStandupDesk;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace QASDWebApi.Hubs
+﻿namespace QASDWebApi.Hubs
 {
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.SignalR;
+
+    using QASDCommon;
+
     public class DeskHub : Hub
     {
         public async Task SendDeskStatus(DeskStatus deskStatus)

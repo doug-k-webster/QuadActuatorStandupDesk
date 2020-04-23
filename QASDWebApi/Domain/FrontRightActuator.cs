@@ -1,11 +1,12 @@
-﻿using System;
-using System.Device.Gpio;
-
-namespace QuadActuatorStandupDesk
+﻿namespace QASDWebApi.Domain
 {
+    using System;
+    using System.Device.Gpio;
+
     public class FrontRightActuator : Actuator
     {
-        public FrontRightActuator(GpioController controller) : base(controller, nameof(FrontRightActuator), 22, 19)
+        public FrontRightActuator(GpioController controller)
+            : base(controller, nameof(FrontRightActuator), 22, 19)
         {
         }
 

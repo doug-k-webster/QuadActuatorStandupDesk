@@ -9,22 +9,23 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
+
     using Microsoft.AspNetCore.SignalR.Client;
-    using QuadActuatorStandupDesk;
+
+    using QASDCommon;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private readonly HubConnection connection;
+
         private readonly DeskClient desk = new DeskClient();
 
         private readonly Progress<Log> progress;
 
-        private readonly HubConnection connection;
         private float deskHeight;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindow()
         {
@@ -42,8 +43,7 @@
 
             InitializeComponent();
 
-            connection = new HubConnectionBuilder()
-                .WithUrl("http://192.168.1.10:9999/deskhub")
+            connection = new HubConnectionBuilder().WithUrl("http://192.168.1.10:9999/deskhub")
                 .WithAutomaticReconnect()
                 .Build();
 
@@ -64,17 +64,20 @@
                 {
                     LogInfo("reconnected to signalr.");
                 }
+
                 // Notify users the connection was reestablished.
                 // Start dequeuing messages queued while reconnecting if any.
 
                 return Task.CompletedTask;
             };
-            connection.On<DeskStatus>("ReceiveDeskStatus", (deskStatus) =>
-             {
-                 this.DeskHeight = deskStatus.Height;
+            connection.On<DeskStatus>(
+                "ReceiveDeskStatus",
+                (deskStatus) =>
+                {
+                    this.DeskHeight = deskStatus.Height;
 
-                 // toto: set actuator heights
-             });
+                    // toto: set actuator heights
+                });
 
             this.DataContext = this;
 
@@ -87,13 +90,9 @@
             }
         }
 
-        protected void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
-
-        protected void OnPropertyChanged(string propertyName) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-
         public float DeskHeight
         {
-            get => deskHeight; 
+            get => deskHeight;
             set
             {
                 deskHeight = value;
@@ -102,6 +101,12 @@
         }
 
         public ObservableCollection<Log> LogEntries { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
+
+        protected void OnPropertyChanged(string propertyName) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e) => this.DragMove();
 
@@ -137,7 +142,6 @@
                     await Task.Delay(5000);
                 }
             }
-            
         }
 
         private async void AllUpButton_Click(object sender, RoutedEventArgs e) => await this.desk.Up(this.progress);
@@ -156,13 +160,14 @@
 
         private async void FrontRightUp_Click(object sender, RoutedEventArgs e) => await this.desk.FrontRightActuatorExtend(this.progress);
 
-        private async void FrontRightDown_Click(object sender, RoutedEventArgs e) => await this.desk.FrontRightActuatorRetract(this.progress);
+        private async void FrontRightDown_Click(object sender, RoutedEventArgs e) =>
+            await this.desk.FrontRightActuatorRetract(this.progress);
 
         private async void BackRightUp_Click(object sender, RoutedEventArgs e) => await this.desk.BackRightActuatorExtend(this.progress);
 
         private async void BackRightDown_Click(object sender, RoutedEventArgs e) => await this.desk.BackRightActuatorRetract(this.progress);
 
-        private void LogInfo(string text) => ((IProgress<Log>)this.progress).Report(Log.Info(text));
+        private void LogInfo(string text) => ((IProgress<Log>) this.progress).Report(Log.Info(text));
 
         private async void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -171,7 +176,7 @@
                 return;
             }
 
-            var commandTextBox = ((TextBox)sender);
+            var commandTextBox = ((TextBox) sender);
             var commandText = commandTextBox.Text;
             commandTextBox.Text = string.Empty;
 

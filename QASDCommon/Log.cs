@@ -1,4 +1,4 @@
-﻿namespace QuadActuatorStandupDesk
+﻿namespace QASDCommon
 {
     using System;
 

@@ -1,27 +1,25 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using QASDWebApi.Hubs;
-using QuadActuatorStandupDesk;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace QASDWebApi.Domain
+﻿namespace QASDWebApi.Domain
 {
-   
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+
+    using QASDCommon;
+
+    using QASDWebApi.Hubs;
+
     public class DeskMonitor
     {
-        private readonly ILogger logger;
         private readonly CancellationToken cancellationToken;
+
         private readonly IHubContext<DeskHub> deskHubContext;
 
-        public DeskMonitor(
-            ILogger<DeskMonitor> logger,
-            IHostApplicationLifetime applicationLifetime,
-            IHubContext<DeskHub> deskHubContext)
+        private readonly ILogger logger;
+
+        public DeskMonitor(ILogger<DeskMonitor> logger, IHostApplicationLifetime applicationLifetime, IHubContext<DeskHub> deskHubContext)
         {
             this.logger = logger;
             this.cancellationToken = applicationLifetime.ApplicationStopping;
@@ -42,9 +40,9 @@ namespace QASDWebApi.Domain
             while (!cancellationToken.IsCancellationRequested)
             {
                 i++;
+
                 // report desk status to the signal r hub
                 //QuadActuatorStandupDesk.Desk.Instance.BackLeftActuator.CurrentExtensionInches;
-                
 
                 Desk.Instance.CorrectDeviatingActuators(this.logger);
 
@@ -65,13 +63,13 @@ FL {fl.Height} ({fl.DeviationFromAverage}) {GetActuatorStateShortString(fl)}    
                     if (i % 10 == 0)
                     {
                         this.logger.LogInformation(debugText);
-                    } else
+                    }
+                    else
                     {
                         this.logger.LogDebug(debugText);
                     }
                 }
 
-                
                 //this.logger.LogInformation($"front left: {deskStatus.FrontLeftActuatorState.Height}");
                 //this.logger.LogInformation($"back left: {deskStatus.BackRightActuatorState.Height}");
                 //this.logger.LogInformation($"front right: {deskStatus.FrontRightActuatorState.Height}");
@@ -83,12 +81,13 @@ FL {fl.Height} ({fl.DeviationFromAverage}) {GetActuatorStateShortString(fl)}    
             }
         }
 
-        private string GetActuatorStateShortString(ActuatorStatus actuator) => actuator.ActuatorState switch
-        {
-            ActuatorState.Extending => "E",
-            ActuatorState.Retracting => "R",
-            _ => "S",
-        };
+        private string GetActuatorStateShortString(ActuatorStatus actuator) =>
+            actuator.ActuatorState switch
+            {
+                ActuatorState.Extending => "E",
+                ActuatorState.Retracting => "R",
+                _ => "S",
+            };
 
         private void Progress_ProgressChanged(object sender, Log e)
         {

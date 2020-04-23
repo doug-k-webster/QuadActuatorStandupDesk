@@ -6,111 +6,120 @@
         xmlns:local="clr-namespace:QASDWin"
         mc:Ignorable="d"
         d:DataContext="local:MainWindow"
-        Title="MainWindow" Height="450" Width="800" Opacity="0.96" WindowStyle="None" Background="#FF151414" AllowsTransparency="True" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="MainWindow" Height="450" Width="800" Opacity="0.96" WindowStyle="None" Background="#FF151414"
+        AllowsTransparency="True" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
-        <local:DateFormatConverter x:Name="DateToStringFormatConverter" x:Key="DateToStringFormatConverter"/>
+        <local:DateFormatConverter x:Name="DateToStringFormatConverter" x:Key="DateToStringFormatConverter" />
         <Style x:Key="ArrowUpSolid" TargetType="{x:Type Path}">
-            <Setter Property="Data" Value="M8.1999979,30L18.000002,30 18.000002,32 8.1999979,32z M8.1999979,25.700012L18.000002,25.700012 18.000002,27.700012 8.1999979,27.700012z M8.1999979,21.399994L18.000002,21.399994 18.000002,23.399994 8.1999979,23.399994z M13.099993,0L26.200001,13.100006 18.000002,13.100006 18.000002,19.100006 8.1999979,19.100006 8.1999979,13.100006 0,13.100006z"/>
+            <Setter Property="Data"
+                    Value="M8.1999979,30L18.000002,30 18.000002,32 8.1999979,32z M8.1999979,25.700012L18.000002,25.700012 18.000002,27.700012 8.1999979,27.700012z M8.1999979,21.399994L18.000002,21.399994 18.000002,23.399994 8.1999979,23.399994z M13.099993,0L26.200001,13.100006 18.000002,13.100006 18.000002,19.100006 8.1999979,19.100006 8.1999979,13.100006 0,13.100006z" />
         </Style>
         <Style x:Key="ArrowDownSolid" TargetType="{x:Type Path}">
-            <Setter Property="Data" Value="M8.1999977,12.800003L18.000003,12.800003 18.000003,18.800003 26.2,18.800003 13.100008,32 0,18.900009 8.1999977,18.900009z M8.1999977,8.6000061L18.000003,8.6000061 18.000003,10.600006 8.1999977,10.600006z M8.1999977,4.3000031L18.000003,4.3000031 18.000003,6.3000031 8.1999977,6.3000031z M8.1999977,0L18.000003,0 18.000003,2 8.1999977,2z"/>
+            <Setter Property="Data"
+                    Value="M8.1999977,12.800003L18.000003,12.800003 18.000003,18.800003 26.2,18.800003 13.100008,32 0,18.900009 8.1999977,18.900009z M8.1999977,8.6000061L18.000003,8.6000061 18.000003,10.600006 8.1999977,10.600006z M8.1999977,4.3000031L18.000003,4.3000031 18.000003,6.3000031 8.1999977,6.3000031z M8.1999977,0L18.000003,0 18.000003,2 8.1999977,2z" />
         </Style>
         <Style x:Key="ArrowUpHollow" TargetType="{x:Type Path}">
-            <Setter Property="Data" Value="M15.992388,6.4072829L23.434462,13.839205 18.531408,13.839205 18.531408,25.586079 14.221378,25.586079 14.221378,13.839205 8.5613613,13.839205z M15.997393,1.9253474C12.395864,1.9253473 8.7943344,3.2993322 6.0493173,6.0473018 0.54927489,11.543241 0.54927489,20.452135 6.0493173,25.949081 11.544355,31.443007 20.455435,31.443007 25.945467,25.949081 31.438492,20.452135 31.445511,11.543241 25.945467,6.0473018 23.200451,3.2993322 19.598923,1.9253473 15.997393,1.9253474z M15.997165,6.7076144E-08C20.090198,-0.00037370616 24.182972,1.5613608 27.307478,4.6863251 33.557526,10.935247 33.557526,21.065136 27.307478,27.311066 21.064449,33.562977 10.937356,33.562977 4.6852932,27.311066 -1.5617644,21.061138 -1.5617644,10.933232 4.6852932,4.6863251 7.8108363,1.5628562 11.90413,0.00037397451 15.997165,6.7076144E-08z"/>
+            <Setter Property="Data"
+                    Value="M15.992388,6.4072829L23.434462,13.839205 18.531408,13.839205 18.531408,25.586079 14.221378,25.586079 14.221378,13.839205 8.5613613,13.839205z M15.997393,1.9253474C12.395864,1.9253473 8.7943344,3.2993322 6.0493173,6.0473018 0.54927489,11.543241 0.54927489,20.452135 6.0493173,25.949081 11.544355,31.443007 20.455435,31.443007 25.945467,25.949081 31.438492,20.452135 31.445511,11.543241 25.945467,6.0473018 23.200451,3.2993322 19.598923,1.9253473 15.997393,1.9253474z M15.997165,6.7076144E-08C20.090198,-0.00037370616 24.182972,1.5613608 27.307478,4.6863251 33.557526,10.935247 33.557526,21.065136 27.307478,27.311066 21.064449,33.562977 10.937356,33.562977 4.6852932,27.311066 -1.5617644,21.061138 -1.5617644,10.933232 4.6852932,4.6863251 7.8108363,1.5628562 11.90413,0.00037397451 15.997165,6.7076144E-08z" />
         </Style>
         <Style x:Key="ArrowDownHollow" TargetType="{x:Type Path}">
-            <Setter Property="Data" Value="M14.220968,6.4110031L18.53298,6.4110031 18.53298,18.158012 23.433004,18.158012 15.996969,25.592003 8.5580044,18.158012 14.220968,18.158012z M16.002621,1.9276252C12.400747,1.9276252 8.798998,3.3016253 6.0519991,6.0496254 0.55500031,11.545625 0.55500031,20.455626 6.0519991,25.951626 11.543997,31.447626 20.457994,31.447626 25.953993,25.951626 31.449991,20.455626 31.443991,11.546625 25.953993,6.0496254 23.206493,3.3016253 19.604495,1.9276252 16.002621,1.9276252z M16.001121,0C20.095745,0.00037527084 24.189493,1.5636253 27.310993,4.6886253 33.55899,10.936625 33.55899,21.064625 27.310993,27.313625 21.061995,33.563625 10.935997,33.560625 4.6859989,27.313625 -1.5619993,21.067625 -1.5619993,10.938625 4.6859989,4.6886253 7.8109983,1.5621252 11.906497,-0.00037479401 16.001121,0z"/>
+            <Setter Property="Data"
+                    Value="M14.220968,6.4110031L18.53298,6.4110031 18.53298,18.158012 23.433004,18.158012 15.996969,25.592003 8.5580044,18.158012 14.220968,18.158012z M16.002621,1.9276252C12.400747,1.9276252 8.798998,3.3016253 6.0519991,6.0496254 0.55500031,11.545625 0.55500031,20.455626 6.0519991,25.951626 11.543997,31.447626 20.457994,31.447626 25.953993,25.951626 31.449991,20.455626 31.443991,11.546625 25.953993,6.0496254 23.206493,3.3016253 19.604495,1.9276252 16.002621,1.9276252z M16.001121,0C20.095745,0.00037527084 24.189493,1.5636253 27.310993,4.6886253 33.55899,10.936625 33.55899,21.064625 27.310993,27.313625 21.061995,33.563625 10.935997,33.560625 4.6859989,27.313625 -1.5619993,21.067625 -1.5619993,10.938625 4.6859989,4.6886253 7.8109983,1.5621252 11.906497,-0.00037479401 16.001121,0z" />
         </Style>
         <Style x:Key="StopGlyph" TargetType="{x:Type Path}">
-            <Setter Property="Data" Value="M11.000001,10.999994L11.000001,20.999994 21.000002,20.999994 21.000002,10.999994z M9.000001,8.9999943L23.000002,8.9999943 23.000002,22.999994 9.000001,22.999994z M16,2C8.2799988,2 2,8.2799988 2,16 2,23.720001 8.2799988,30 16,30 23.720001,30 30,23.720001 30,16 30,8.2799988 23.720001,2 16,2z M16,0C24.821991,0 32,7.178009 32,16 32,24.821991 24.821991,32 16,32 7.1779785,32 0,24.821991 0,16 0,7.178009 7.1779785,0 16,0z"/>
+            <Setter Property="Data"
+                    Value="M11.000001,10.999994L11.000001,20.999994 21.000002,20.999994 21.000002,10.999994z M9.000001,8.9999943L23.000002,8.9999943 23.000002,22.999994 9.000001,22.999994z M16,2C8.2799988,2 2,8.2799988 2,16 2,23.720001 8.2799988,30 16,30 23.720001,30 30,23.720001 30,16 30,8.2799988 23.720001,2 16,2z M16,0C24.821991,0 32,7.178009 32,16 32,24.821991 24.821991,32 16,32 7.1779785,32 0,24.821991 0,16 0,7.178009 7.1779785,0 16,0z" />
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32"/>
-            <RowDefinition Height="64"/>
-            <RowDefinition/>
-            <RowDefinition Height="32"/>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="64" />
+            <RowDefinition />
+            <RowDefinition Height="32" />
         </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" MouseDown="TitleBar_MouseDown" Fill="#FF0D0A1F"/>
-        <Button Width="24" Height="24" HorizontalAlignment="Left" Margin="772,4,0,0" VerticalAlignment="Top" Click="CloseButton_Click" >
-            <Path Data="M1.442037,0L16.002031,14.585751 30.588022,0.025996563 32.001024,1.4409965 17.414783,16.001002 31.97503,30.587006 30.560022,32 15.999268,17.413969 1.4130009,31.973999 0,30.558998 14.586494,15.998742 0.027028472,1.4140019z" 
-               Stretch="Uniform" Fill="#FF4A658F" />
+        <Rectangle Grid.Row="0" MouseDown="TitleBar_MouseDown" Fill="#FF0D0A1F" />
+        <Button Width="24" Height="24" HorizontalAlignment="Left" Margin="772,4,0,0" VerticalAlignment="Top"
+                Click="CloseButton_Click">
+            <Path
+                Data="M1.442037,0L16.002031,14.585751 30.588022,0.025996563 32.001024,1.4409965 17.414783,16.001002 31.97503,30.587006 30.560022,32 15.999268,17.413969 1.4130009,31.973999 0,30.558998 14.586494,15.998742 0.027028472,1.4140019z"
+                Stretch="Uniform" Fill="#FF4A658F" />
         </Button>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Click="AllUpButton_Click" >
-                <Path Style="{StaticResource ArrowUpHollow}" Stroke="Black" Fill="Blue"  />
+            <Button Grid.Column="0" Click="AllUpButton_Click">
+                <Path Style="{StaticResource ArrowUpHollow}" Stroke="Black" Fill="Blue" />
             </Button>
             <Button Grid.Column="1" Click="AllDownButton_Click">
-                <Path Style="{StaticResource ArrowDownHollow}" Stroke="Black" Fill="Blue"  />
+                <Path Style="{StaticResource ArrowDownHollow}" Stroke="Black" Fill="Blue" />
             </Button>
             <Button Grid.Column="2" Click="AllStopButton_Click">
-            <Path Style="{StaticResource StopGlyph}" Stroke="Black" Fill="Blue"  />
+                <Path Style="{StaticResource StopGlyph}" Stroke="Black" Fill="Blue" />
             </Button>
             <Grid Grid.Column="3">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Height" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Text="{Binding DeskHeight}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="Height" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Grid.Row="1" Text="{Binding DeskHeight}" Foreground="White" HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
             </Grid>
             <Grid Grid.Column="4">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Click="FrontLeftUp_Click">
-                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
                 <Button Grid.Row="1" Click="FrontLeftDown_Click">
-                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
             <Grid Grid.Column="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Click="BackLeftUp_Click">
-                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
                 <Button Grid.Row="1" Click="BackLeftDown_Click">
-                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
             <Grid Grid.Column="6">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Click="BackRightUp_Click">
-                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
                 <Button Grid.Row="1" Click="BackRightDown_Click">
-                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
             <Grid Grid.Column="7">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Click="FrontRightUp_Click">
-                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
                 <Button Grid.Row="1" Click="FrontRightDown_Click">
-                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue"  />
+                    <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
 
@@ -120,19 +129,20 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding DateTime,Converter={StaticResource DateToStringFormatConverter}}" Grid.Column="0" Foreground="White"/>
-                        <TextBlock Text="{Binding Text}" Grid.Column="1" Foreground="White"/>
-                    </Grid>                    
+                        <TextBlock Text="{Binding DateTime,Converter={StaticResource DateToStringFormatConverter}}"
+                                   Grid.Column="0" Foreground="White" />
+                        <TextBlock Text="{Binding Text}" Grid.Column="1" Foreground="White" />
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Grid Grid.Row="3" x:Name="CommandGrid" >
+        <Grid Grid.Row="3" x:Name="CommandGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="64"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="64" />
             </Grid.ColumnDefinitions>
             <TextBox KeyDown="CommandTextBox_KeyDown" />
         </Grid>
