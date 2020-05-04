@@ -79,10 +79,10 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Click="FrontLeftUp_Click">
+                <Button Grid.Row="0" x:Name="FrontLeftUpButton">
                     <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
-                <Button Grid.Row="1" Click="FrontLeftDown_Click">
+                <Button Grid.Row="1" x:Name="FrontLeftDownButton">
                     <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
@@ -91,10 +91,10 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Click="BackLeftUp_Click">
+                <Button Grid.Row="0" x:Name="BackLeftUpButton">
                     <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
-                <Button Grid.Row="1" Click="BackLeftDown_Click">
+                <Button Grid.Row="1" x:Name="BackLeftDownButton">
                     <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
@@ -103,10 +103,10 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Click="BackRightUp_Click">
+                <Button Grid.Row="0" x:Name="BackRightUpButton">
                     <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
-                <Button Grid.Row="1" Click="BackRightDown_Click">
+                <Button Grid.Row="1" x:Name="BackRightDownButton">
                     <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
@@ -115,10 +115,10 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" Click="FrontRightUp_Click">
+                <Button Grid.Row="0" x:Name="FrontRightUpButton">
                     <Path Style="{StaticResource ArrowUpSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
-                <Button Grid.Row="1" Click="FrontRightDown_Click">
+                <Button Grid.Row="1" x:Name="FrontRightDownButton">
                     <Path Style="{StaticResource ArrowDownSolid}" Stroke="Black" Fill="Blue" />
                 </Button>
             </Grid>
